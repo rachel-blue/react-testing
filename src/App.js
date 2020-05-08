@@ -1,26 +1,61 @@
-import React from 'react';
-import logo from './logo.svg';
+import React, { Component } from 'react';
 import './App.css';
 
-function App() {
-  return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
+class App extends Component {
+  constructor(props) {
+    super(props);
+
+    this.state = {
+      counter: 0,
+      error: false,
+    };
+    this.decrementCounter = this.decrementCounter.bind(this);
+    this.incrementCounter = this.incrementCounter.bind(this);
+  }
+
+  decrementCounter() {
+    if (this.state.counter === 0) {
+      this.setState({ error: true });
+    }
+    this.setState({ counter: this.state.counter - 1 });
+  }
+
+  incrementCounter() {
+    if (this.state.error) {
+      this.setState({ error: false });
+    }
+    this.setState({ counter: this.state.counter + 1})
+  }
+
+  render() {
+    const errorClass = this.state.error ? '' : 'hidden';
+
+    return (
+      <div data-test="component-app">
+        <h1 data-test="counter-display">
+          The counter is currently {this.state.counter}
+        </h1>
+        <div
+          data-test="error-message"
+          className={`error ${errorClass}`}
         >
-          Learn React Testing
-        </a>
-      </header>
-    </div>
-  );
+          The counter cannot go below 0
+        </div>
+        <button
+          data-test="increment-button"
+          onClick={this.incrementCounter}
+        >
+          Increment Counter
+        </button>
+        <button
+          data-test="decrement-button"
+          onClick={this.decrementCounter}
+        >
+          Decrement Counter
+        </button>
+      </div>
+    );
+  }
 }
 
 export default App;
